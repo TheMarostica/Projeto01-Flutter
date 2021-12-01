@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto01/dados.dart';
 
 class TelaHome extends StatefulWidget {
   const TelaHome({ Key? key }) : super(key: key);
@@ -142,7 +141,7 @@ class _TelaHomeState extends State<TelaHome> {
               ),
 
               onPressed: (){
-                Navigator.pushNamed(context, 'metas');
+                Navigator.pushNamed(context, 'metas', arguments: obj);
               },
 
             ),

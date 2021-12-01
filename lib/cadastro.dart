@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto01/dados.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({ Key? key }) : super(key: key);
@@ -9,7 +9,7 @@ class TelaCadastro extends StatefulWidget {
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
-
+  
   var nome = TextEditingController();
   var email = TextEditingController();
   var senha = TextEditingController();
@@ -97,14 +97,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
                   TextField( //campo da senha
                     controller: senha,
-
+                    obscureText: true,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
 
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(9)),
                       ),
-
+                      
                       labelText: 'Senha',
                       labelStyle: TextStyle(
                         fontSize: 20,
@@ -119,30 +119,47 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 ],
               ),
 
-              Padding(padding: EdgeInsets.all(10)),
+              Padding(padding: EdgeInsets.all(3)),
 
-              ElevatedButton(
-                child: Text('Confirmar',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 150,
+                    child: OutlinedButton(
+                      child: Text(
+                        'criar',
+                        style: TextStyle(
+                          color: Colors.blue.shade900,
+                        ),
+                      ),
+
+                      //criando a conta
+                      onPressed: () {
+                        criarConta(
+                          nome.text,
+                          email.text,
+                          senha.text,
+                        );
+                      },
+
+                    ),
                   ),
-                ),
-                
-                onPressed: (){
-                  setState(() {
-                    var obj = Dados(
-                      nome.text,
-                      email.text,
-                      senha.text,
-                    );
-
-                    Navigator.pushNamed(context, 'login', arguments: obj);
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue.shade900,
-                ),
+                  Container(
+                    width: 150,
+                    child: OutlinedButton(
+                      child: Text(
+                        'cancelar',
+                        style: TextStyle(
+                          color: Colors.blue.shade900,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
               ),
 
             ],
@@ -155,4 +172,34 @@ class _TelaCadastroState extends State<TelaCadastro> {
       
     );
   }
+  void criarConta(nome, email, senha) {
+
+    FirebaseAuth.instance.
+        createUserWithEmailAndPassword(email: email, password: senha)
+        .then((value) {
+          //se ele chegar aqui dentor, significa que deu certo
+
+          exibirMensagem('Usuário cadastrado com sucesso!');
+          Navigator.pop(context); //vai voltar para o login
+
+        }).catchError((erro){ //caso haja algum erro
+          if(erro.code == 'email-already-in-use'){
+            exibirMensagem('ERRO: O email informado está em uso.');
+          }else if(erro.code == 'invalid-email'){
+            exibirMensagem('ERRO: email inválido');
+          }else{
+            exibirMensagem('ERRO: ${erro.message}');
+          }
+        });
+  }
+
+  void exibirMensagem(msg){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        duration: Duration(seconds: 2),
+      )
+    );
+  }
+
 }

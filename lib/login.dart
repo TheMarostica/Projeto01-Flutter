@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TelaLogin extends StatefulWidget {
@@ -9,7 +10,9 @@ class TelaLogin extends StatefulWidget {
 
 class _TelaLoginState extends State<TelaLogin> {
 
-  var txtNome = TextEditingController();
+  var email = TextEditingController();
+  var senha = TextEditingController();
+  bool isLoading = false;
   
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class _TelaLoginState extends State<TelaLogin> {
           child: Column(
             children: [
               Icon(
-                Icons.lock,
+                Icons.person,
                 color: Colors.blue.shade900,
                 size: 100,
               ),
@@ -31,7 +34,7 @@ class _TelaLoginState extends State<TelaLogin> {
               Text(
                 'Login',
                 style: TextStyle( //estilo do testo
-                  color: Colors.blue.shade900,
+                  color: Colors.black87,
                   fontSize: 12,
                 ),
               ),
@@ -44,7 +47,7 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
 
                   TextField(
-                    controller: txtNome,
+                    controller: email,
                     decoration: InputDecoration(
 
                       border: OutlineInputBorder(
@@ -55,13 +58,18 @@ class _TelaLoginState extends State<TelaLogin> {
                         ),
                       ),
 
-                      labelText: 'Nome',
-                      labelStyle: TextStyle(
-                        fontSize: 20,
+                      prefixIcon: Icon(
+                        Icons.email,
                         color: Colors.blue.shade900,
                       ),
 
-                      hintText: 'Digite seu nome',
+                      labelText: 'Email',
+                      labelStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black54,
+                      ),
+
+                      hintText: 'Digite seu Email',
                       hintStyle: TextStyle(color: Colors.black12),
 
                     ),
@@ -72,16 +80,23 @@ class _TelaLoginState extends State<TelaLogin> {
                   ),
 
                   TextField(
+                    obscureText: true,
+                    controller: senha,
                     decoration: InputDecoration(
 
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(9)),
                       ),
 
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Colors.blue.shade900,
+                      ),
+
                       labelText: 'Senha',
                       labelStyle: TextStyle(
                         fontSize: 20,
-                        color: Colors.blue.shade900,
+                        color: Colors.black54,
                       ),
 
                       hintText: 'Digite sua senha',
@@ -108,8 +123,11 @@ class _TelaLoginState extends State<TelaLogin> {
                   primary: Colors.blue.shade900,
                 ),
 
-                onPressed: (){
-                  Navigator.pushNamed(context, 'home', arguments: txtNome.text);
+                onPressed: () {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  login(email.text, senha.text);
                 },
 
               ),
@@ -135,4 +153,31 @@ class _TelaLoginState extends State<TelaLogin> {
       ),
     );
   }
+
+  void login(email, senha){
+    FirebaseAuth.instance.signInWithEmailAndPassword
+        (email: email, password: senha).then((value) { //varifica se está tudo certo ou se deu um erro
+          Navigator.pushNamed(context, 'home', arguments: email);
+        }).catchError((erro){ //para mudar as mensagens de erro
+          if(erro.code == 'user-not-found'){
+            exibirMensagem('ERRO: Usuário não encontrado.');
+          }else if(erro.code == 'wrong-password'){
+            exibirMensagem('ERRO: Senha incorreta.');
+          }else if(erro.code == 'invalid-email'){
+            exibirMensagem('ERRO: Email inválido');
+          }else{
+            exibirMensagem('ERRO: ${erro.message}.');
+          }
+        });
+  }
+
+  void exibirMensagem(msg){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        duration: Duration(seconds: 2),
+      )
+    );
+  }
+  
 }

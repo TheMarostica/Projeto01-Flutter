@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1053633519464",
+    "project_id": "projeto-saude-4eacd",
+    "storage_bucket": "projeto-saude-4eacd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053633519464:android:723d6618bf7b6ef33200dd",
+        "android_client_info": {
+          "package_name": "com.example.projeto01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053633519464-fcjm1hsqh484grif2vsrk8vfd723n20t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDagK7n-tzrVYpgHJMCKwcQpzvxuJz-OrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053633519464-fcjm1hsqh484grif2vsrk8vfd723n20t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

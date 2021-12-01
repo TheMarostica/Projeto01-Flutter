@@ -16,7 +16,7 @@ void main(){
 
       title: 'Projeto',
 
-      initialRoute: 'sobre',
+      initialRoute: 'login',
 
       routes: {
         'login' : (context) => TelaLogin(),
