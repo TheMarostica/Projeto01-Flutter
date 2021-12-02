@@ -27,7 +27,7 @@ void main() async{
       routes: {
         'login' : (context) => TelaLogin(),
         'cadastro' : (context) => TelaCadastro(),
-        'cadastroMeta' : (context) => CadastroPage(),
+        'cadastro_meta' : (context) => CadastroPage(),
         'home' : (context) => TelaHome(),
         'imc' : (context) => TelaIMC(),
         'agua' : (context) => TelaAgua(),

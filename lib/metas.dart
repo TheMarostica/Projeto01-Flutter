@@ -15,138 +15,17 @@ class _TelaMetasState extends State<TelaMetas> {
   var descricao = TextEditingController();
   String obj = "";
 
-  /*var lista = []; //lista dinâmica
-  var metas = TextEditingController(); //retorna a tarefa que o usuário adicionar
-
-  var subLista = []; //subtitulo
-  var subtitle = TextEditingController();
-
-  @override
-  void initState(){ //inicializar a lista
-    lista.add('Adicione suas metas...');
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Suas Metas'),
-        centerTitle: true,
-        backgroundColor: Colors.blue.shade900,
-      ),
-      
-      body: Container(
-        padding: EdgeInsets.all(30),
-
-        child: ListView.builder(
-          itemCount: lista.length, //retorna os elementos
-
-          itemBuilder: (context, index){
-            return Card(
-              color: Colors.grey.shade100,
-              shadowColor: Colors.blue,
-              elevation: 20, //movendo a sombra
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-
-              child: ListTile(
-                leading: Icon(Icons.arrow_right),
-
-                title: Text(
-                  lista[index],
-                  style: TextStyle(fontSize: 20),
-                ),
-
-                trailing: IconButton(
-                  icon: Icon(Icons.delete_outline_sharp),
-
-                  onPressed: (){
-                    setState(() { //para conseguir mudar o estado da tela
-                      lista.removeAt(index);
-                      ScaffoldMessenger.of(context).showSnackBar( //aparece uma barrinha embaixo
-                        SnackBar( content: Text('Tarefa removida com sucesso'), duration: Duration(seconds: 2)),
-                      );
-                    });
-                  },
-                ),
-              ),
-            );
-          }
-        ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue.shade900,
-        child: Icon(Icons.add),
-
-        onPressed: ()async{ //a aplicação vai ficar esperando que o usuário digite algo
-          await showDialog(
-            context: context, 
-            builder: (context){
-              return AlertDialog(
-                title: Text(
-                  'Adionar Tarefa',
-                  style: TextStyle(fontSize: 16),
-                ),
-
-                content: TextField(
-                  controller: metas,
-                  style: TextStyle(fontSize: 22),
-                  decoration: InputDecoration(),
-                ),
-
-                actions: [
-                  TextButton(
-                    child: Text('ok'),
-                    onPressed: (){
-                      setState(() {
-                        var msg = '';
-
-                        if(metas.text.isNotEmpty){
-                          lista.add(metas.text);
-                          metas.clear();
-                          msg = 'Tarefa adicionada com sucesso';
-                        }
-                        else{
-                          msg = 'Erro: A descrição da tarefa não foi informada';
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(msg), duration: Duration(seconds: 2),),
-                        );
-
-                        Navigator.pop(context);
-
-                      });
-                    },
-                  ),
-                  TextButton(
-                    child: Text('cancelar'),
-                    onPressed: (){
-                      Navigator.pop(context);
-                    }, 
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
-  }*/
-
   var metas;
 
   exibirItemColecao(item){
     metas = FirebaseFirestore.instance.collection('metas').where('email', isEqualTo: obj);
+
     String meta = item.data()['meta'];
     String descricao = item.data()['descricao'];
 
     return ListTile(
       title: Text(meta, style: const TextStyle(fontSize: 30)),
-      subtitle: Text(descricao, style: const TextStyle(fontSize: 20),),
+      subtitle: Text(descricao, style: const TextStyle(fontSize: 15),),
       trailing: IconButton(
         icon: const Icon(Icons.delete),
         onPressed: (){
@@ -161,7 +40,7 @@ class _TelaMetasState extends State<TelaMetas> {
       //se ele clica em cima da meta, ele vai pra tela de cadastro para editar a meta
       onTap: (){
         Navigator.pushNamed(
-          context, 'cadastroMeta',
+          context, 'cadastro_meta',
           arguments: item.id, //estamos passando o ID do documento
         );
       },
@@ -225,7 +104,7 @@ class _TelaMetasState extends State<TelaMetas> {
         child: Icon(Icons.add),
 
         onPressed: (){
-          Navigator.pushNamed(context, 'cadastroMeta');
+          Navigator.pushNamed(context, 'cadastro_meta');
         },
       ),
     

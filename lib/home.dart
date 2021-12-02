@@ -18,7 +18,7 @@ class _TelaHomeState extends State<TelaHome> {
         title: Row(
           children: [
             Text('Menu'),
-            SizedBox(width: 170,),
+            SizedBox(width: 150),
             Icon(Icons.perm_identity),
             Text(obj),
           ],
