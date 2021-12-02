@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +10,16 @@ class TelaCadastro extends StatefulWidget {
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
-  
+  var cpf = TextEditingController();
   var nome = TextEditingController();
   var email = TextEditingController();
   var senha = TextEditingController();
+  var telefone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var id = ModalRoute.of(context)?.settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade900, // ou Color(0xFF0D47A1),
@@ -95,6 +99,62 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
                   Padding(padding: EdgeInsets.all(3)),
 
+                  TextField( //campo do cpf
+                    controller: cpf,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9)),
+
+                        borderSide: BorderSide(
+                          color: Colors.blue.shade900,
+                        ),
+
+                      ),
+
+                      labelText: 'CPF',
+                      labelStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.blue.shade900,
+                      ),
+
+                      hintText: 'Digite seu CPF',
+                      hintStyle: TextStyle(color: Colors.black12),
+
+                    ),
+                  ),
+
+                  Padding(padding: EdgeInsets.all(3)),
+
+                  TextField( //campo do telefone
+                    controller: telefone,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9)),
+
+                        borderSide: BorderSide(
+                          color: Colors.blue.shade900,
+                        ),
+
+                      ),
+
+                      labelText: 'Telefone',
+                      labelStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.blue.shade900,
+                      ),
+
+                      hintText: 'Digite seu Telefone',
+                      hintStyle: TextStyle(color: Colors.black12),
+
+                    ),
+                  ),
+
+                  Padding(padding: EdgeInsets.all(3)),
+
                   TextField( //campo da senha
                     controller: senha,
                     obscureText: true,
@@ -128,16 +188,37 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     width: 150,
                     child: OutlinedButton(
                       child: Text(
-                        'criar',
+                        'Confirmar',
                         style: TextStyle(
                           color: Colors.blue.shade900,
                         ),
                       ),
 
-                      //criando a conta
+                      //criando o usuário
                       onPressed: () {
+                        if (id == null){
+                          //
+                          // ADICIONAR um NOVO DOCUMENTO
+                          //
+                          FirebaseFirestore.instance.collection('usuario').add({
+                            'email': email.text,
+                            'nome': nome.text,
+                            'cpf': cpf.text,
+                            'telefone': telefone.text,
+                          });
+                          
+                        }else{
+                          //
+                          // ATUALIZAR UM DOCUMENTO EXISTENTE
+                          //
+                          FirebaseFirestore.instance.collection('usuario').doc(id.toString()).set({
+                            'email': email.text,
+                            'nome': nome.text,
+                            'cpf': cpf.text,
+                            'telefone': telefone.text,
+                          });
+                        }
                         criarConta(
-                          nome.text,
                           email.text,
                           senha.text,
                         );
@@ -149,7 +230,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     width: 150,
                     child: OutlinedButton(
                       child: Text(
-                        'cancelar',
+                        'Cancelar',
                         style: TextStyle(
                           color: Colors.blue.shade900,
                         ),
@@ -161,18 +242,13 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   ),
                 ],
               ),
-
             ],
-
           ),
-
         ),
-
       ),
-      
     );
   }
-  void criarConta(nome, email, senha) {
+  void criarConta(email, senha) {
 
     FirebaseAuth.instance.
         createUserWithEmailAndPassword(email: email, password: senha)

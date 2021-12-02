@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TelaMetas extends StatefulWidget {
@@ -10,10 +11,9 @@ class TelaMetas extends StatefulWidget {
 }
 
 class _TelaMetasState extends State<TelaMetas> {
-
+  var meta = TextEditingController();
+  var descricao = TextEditingController();
   String obj = "";
-
-
 
   /*var lista = []; //lista dinâmica
   var metas = TextEditingController(); //retorna a tarefa que o usuário adicionar
@@ -140,18 +140,18 @@ class _TelaMetasState extends State<TelaMetas> {
   var metas;
 
   exibirItemColecao(item){
+    metas = FirebaseFirestore.instance.collection('metas').where('email', isEqualTo: obj);
     String meta = item.data()['meta'];
     String descricao = item.data()['descricao'];
 
     return ListTile(
       title: Text(meta, style: const TextStyle(fontSize: 30)),
-      subtitle: Text('$descricao', style: const TextStyle(fontSize: 25),),
+      subtitle: Text(descricao, style: const TextStyle(fontSize: 20),),
       trailing: IconButton(
         icon: const Icon(Icons.delete),
         onPressed: (){
-
           //
-          //APAGA documento
+          //apagar o documento
           //
           metas.doc(item.id).delete();
 
@@ -161,7 +161,7 @@ class _TelaMetasState extends State<TelaMetas> {
       //se ele clica em cima da meta, ele vai pra tela de cadastro para editar a meta
       onTap: (){
         Navigator.pushNamed(
-          context, 'cadastro',
+          context, 'cadastroMeta',
           arguments: item.id, //estamos passando o ID do documento
         );
       },
@@ -180,21 +180,8 @@ class _TelaMetasState extends State<TelaMetas> {
         title: Text('Suas Metas'),
         centerTitle: true,
         backgroundColor: Colors.blue.shade900,
-
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout_outlined),
-            onPressed: () async {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(context, 'login');
-            },
-          )
-        ],
-
       ),
       //backgroundColor: Colors.brown.shade100,
-
-
 
       //
       //LISTAR os documentos da COLEÇÃO
@@ -226,7 +213,6 @@ class _TelaMetasState extends State<TelaMetas> {
                   return exibirItemColecao(dados.docs[index]);
 
                 }
-
               );
           }
         }
@@ -237,8 +223,9 @@ class _TelaMetasState extends State<TelaMetas> {
         foregroundColor: Colors.white,
         backgroundColor: Colors.blue.shade900,
         child: Icon(Icons.add),
+
         onPressed: (){
-          Navigator.pushNamed(context, 'cadastro');
+          Navigator.pushNamed(context, 'cadastroMeta');
         },
       ),
     
